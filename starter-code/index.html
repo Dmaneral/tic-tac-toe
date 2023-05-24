@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+  <title>Frontend Mentor | Tic Tac Toe</title>
+</head>
+
+<body>
+  <section id="menu">
+    <div class="logo">
+      <img src="./assets/icon-x.svg" alt="X">
+      <img src="./assets/icon-o.svg" alt="O">
+    </div>
+    <div class="pick-player-cont">
+      <h1>PICK PLAYER 1’S MARK</h1>
+      <div class="pick-player">
+        <div class="pick-x">
+          <svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+            <path class="pick-x" id="X"
+              d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z"
+              fill="#A8BFC9" fill-rule="evenodd" /></svg>
+        </div>
+        <div class="pick-o active-player">
+          <svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+            <path class="pick-o" id="O"
+              d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z"
+              fill="#A8BFC9" /></svg>
+        </div>
+      </div>
+      <label>REMEMBER : X GOES FIRST</label>
+    </div>
+    <div class="start-play">
+      <button class="play-btn" id="vs-cpu" onclick="startGame('cpu-mode')">NEW GAME (VS CPU)</button>
+      <button class="play-btn" id="vs-player" onclick="startGame('player-mode')">NEW GAME (VS PLAYER)</button>
+    </div>
+  </section>
+  <section id="ingame">
+    <div class="header">
+      <div class="logo-wrapper">
+        <div class="logo">
+          <img src="./assets/icon-x.svg" alt="X">
+          <img src="./assets/icon-o.svg" alt="O">
+        </div>
+      </div>
+      <div class="turn-wrapper">
+        <div class="turn">
+          <img src="./assets/turn-x.svg" alt="turn" id="turn-icon">
+          <label>TURN</label>
+        </div>
+      </div>
+      <div class="restart-wrapper">
+        <div id="restart">
+          <img src="./assets/icon-restart.svg" alt="restart">
+        </div>
+      </div>
+    </div>
+    <div class="board">
+      <div class="tab"></div>
+      <div class="tab"></div>
+      <div class="tab"></div>
+      <div class="tab"></div>
+      <div class="tab"></div>
+      <div class="tab"></div>
+      <div class="tab"></div>
+      <div class="tab"></div>
+      <div class="tab"></div>
+    </div>
+    <div class="statistics">
+      <div class="statistic-tab">
+        <label id="first-person">X (YOU)</label>
+        <span id="x-score">0</span>
+      </div>
+      <div class="statistic-tab">
+        <label>TIES</label>
+        <span id="tie">0</span>
+      </div>
+      <div class="statistic-tab">
+        <label id="second-person">O (CPU)</label>
+        <span id="o-score">0</span>
+      </div>
+    </div>
+  </section>
+  <script src="./script.js"></script>
+</body>
+
+</html>
