@@ -1,14 +1,10 @@
 const menu = document.querySelector("#menu");
 const ingame = document.querySelector("#ingame");
-
 const pick_x = document.querySelectorAll('.pick-x');
 const pick_o = document.querySelectorAll('.pick-o');
-
 const turn_icon = document.getElementById('turn-icon');
 const tab = document.querySelectorAll('.tab');
-
 const restart = document.getElementById('restart');
-
 let firstPerson = document.getElementById('first-person');
 let secondPerson = document.getElementById('second-person');
 let xScore = document.getElementById('x-score');
@@ -40,7 +36,7 @@ pick_o.forEach((o) => {
 })
 
 let player = "o";
-
+/* This is function to choose your mark for game, X or O */
 function pickPlayer(e) {
     if(e.target == pick_x[0] || e.target == pick_x[1]) {
         pick_x[0].classList.add('active-player');
@@ -54,7 +50,7 @@ function pickPlayer(e) {
 }
 
 let mode = 'cpu-mode';
-
+/* This is function to choose game mode. Player can play against CPU (AI moves) or play against friend */
 function startGame(chooseMode) {
     menu.style.display = 'none';
     ingame.style.display = 'flex';
@@ -76,11 +72,18 @@ function startGame(chooseMode) {
     if(mode === 'player-mode') {
         firstPerson.innerHTML = "X (P1)";
         secondPerson.innerHTML = "O (P2)";
-        putMarks();
+        putMarksPvP();
     }
 }
 
-function putMarks() {
+function putMarksCpu() {
+    let cpuCounter = 0;
+    for(let i = 0; i < tab.length; i++){
+
+    }
+}
+/* This is function to make board tabs clickable, change turns, define winner... */
+function putMarksPvP() {
     for(let i = 0; i < tab.length; i++){
         tab[i].addEventListener('click', (e) => {
             let newMark = document.createElement('img');
@@ -116,10 +119,13 @@ function putMarks() {
     }
 }
 
+/* This function checks if X tabs matches with any winning combinations. Returns True of False */
 function checkMovesX() {
     return winCombinations.find((comb) => comb.every((tab) => filledByX.includes(tab)));
 }
 
+/* If previous function returns true, this function will add some styles on winning combination tabs
+   and increases score of X */
 function winX() {
     for(let i = 0; i < filledByX.length; i++) {
         tab[filledByX[i]].style.transition = 'all 1s';
@@ -130,10 +136,13 @@ function winX() {
     xScore.innerHTML++;
 }
 
+/* This function checks if O tabs matches with any winning combinations */
 function checkMovesO() {
     return winCombinations.find((comb) => comb.every((tab) => filledByO.includes(tab)));
 }
 
+/* If previous function returns true, this function will add some styles on winning combination tabs
+   and increases score of O */
 function winO() {
     for(let i = 0; i < filledByO.length; i++) {
         tab[filledByO[i]].style.transition = 'all 1s';
@@ -144,6 +153,7 @@ function winO() {
     oScore.innerHTML++
 }
 
+/* This function is for not to add any mark on board after game is over */
 function stopFilling() {
     for(let i = 0; i < tab.length; i++) {
         if(!tab[i].classList.contains('filled')) {
