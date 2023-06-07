@@ -431,7 +431,11 @@ function quitGame() {
             document.body.style.alignItems = 'center';
             cleanTabs();
             cleanArrays();
-            onHoverMarks();
+            if(mode === 'player-mode') {
+                onHoverMarksPvp();
+            }else {
+                onHoverMarksCpu();
+            }
             xScore.innerHTML = 0;
             oScore.innerHTML = 0;
             tie.innerHTML = 0;
@@ -444,7 +448,11 @@ function nextRound() {
         game_over.style.display = 'none';
         cleanTabs();
         cleanArrays();
-        onHoverMarks();
+        if(mode === 'player-mode') {
+            onHoverMarksPvp();
+        }else {
+            onHoverMarksCpu();
+        }
         if (mode === 'cpu-mode' && player === 'o') {
             makeCPUMove();
         }
@@ -489,7 +497,11 @@ function restartGame() {
 
         cleanTabs();
         cleanArrays();
-        onHoverMarks();
+        if(mode === 'player-mode') {
+            onHoverMarksPvp();
+        }else {
+            onHoverMarksCpu();
+        }
         if (mode === 'cpu-mode' && player === 'o') {
             makeCPUMove();
         }
