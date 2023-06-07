@@ -1,3 +1,4 @@
+const screenSize = window.matchMedia('(min-width: 768px)');
 const menu = document.querySelector("#menu");
 const ingame = document.querySelector("#ingame");
 const pick_x = document.querySelectorAll('.pick-x');
@@ -50,10 +51,14 @@ function pickPlayer(e) {
     if (e.target == pick_x[0] || e.target == pick_x[1]) {
         pick_x[0].classList.add('active-player');
         pick_o[0].classList.remove('active-player');
+        pick_x[0].classList.remove('disactive-player');
+        pick_o[0].classList.add('disactive-player');
         player = "x";
     } else if (e.target == pick_o[0] || e.target == pick_o[1]) {
         pick_x[0].classList.remove('active-player');
         pick_o[0].classList.add('active-player');
+        pick_x[0].classList.add('disactive-player');
+        pick_o[0].classList.remove('disactive-player');
         player = "o";
     }
 }
@@ -63,9 +68,13 @@ let mode = 'cpu-mode';
 function startGame(chooseMode) {
     menu.style.display = 'none';
     ingame.style.display = 'flex';
-    document.body.style.alignItems = 'flex-start';
+    if (screenSize.matches) {
+        document.body.style.alignItems = 'center';
+    } else {
+        document.body.style.alignItems = 'flex-start';
+    }
+    onHoverMarks();
     mode = chooseMode;
-
     if (mode === 'cpu-mode') {
         if (player === "x") {
             firstPerson.innerHTML = "X (YOU)";
@@ -73,184 +82,102 @@ function startGame(chooseMode) {
         } else {
             secondPerson.innerHTML = "O (YOU)";
             firstPerson.innerHTML = "X (CPU)";
-            next_btn.addEventListener('click', putMarksCpu);
-        }
-        putMarksCpu();
 
+        }
+        putMarksCpuMode();
     }
 
     if (mode === 'player-mode') {
         firstPerson.innerHTML = "X (P1)";
         secondPerson.innerHTML = "O (P2)";
-        putMarksPvP();
-
+        putMarksPvPMode();
     }
     restart.addEventListener('click', restartGame);
 }
 
-function putMarksCpu() {
-    // if (player == 'x') {
-    //     for (let i = 0; i < tab.length; i++) {
-    //         tab[i].addEventListener('click', (e) => {
-    //             let newMarkX = document.createElement('img');
-    //             let newMarkO = document.createElement('img');
-    //             let cpuMove;
-    //             if (!tab[i].classList.contains('filled')) {
-    //                 if (turn !== 'x') {
-    //                     return; // Ignore player's click if it's not their turn
-    //                 }
-    //                 tab[i].appendChild(newMarkX);
-    //                 newMarkX.classList.add('mark');
-    //                 newMarkX.src = './assets/icon-x.svg';
-    //                 turn_icon.src = './assets/turn-o.svg';
-    //                 tab[i].classList.add('filled');
-    //                 filledByX.push(i);
-    //                 let indexToRemovePlayer = freeTabs.indexOf(i);
-    //                 if (indexToRemovePlayer > -1) {
-    //                     freeTabs.splice(indexToRemovePlayer, 1);
-    //                 }
-    //                 if (checkMovesX()) {
-    //                     winX();
-    //                     stopFilling();
-    //                     return;
-    //                 } else if (filledByX.length === 5) {
-    //                     tieGame();
-    //                 }
-    //                 turn = 'o';
-    //                 cpuMove = freeTabs[(Math.floor(Math.random() * freeTabs.length))];
-    //                 if (!tab[cpuMove].classList.contains('filled')) {
-    //                     newMarkO.classList.add('mark');
-    //                     newMarkO.src = './assets/icon-o.svg';
-    //                     tab[cpuMove].classList.add('filled');
-    //                     setTimeout(() => {
-    //                         tab[cpuMove].appendChild(newMarkO);
-    //                         turn_icon.src = './assets/turn-x.svg';
-    //                     }, 750);
+function onHoverMarks() {
+    if (mode === 'player-mode') {
+        for (let index = 0; index < freeTabs.length; index++) {
+            const freeIndex = freeTabs[index];
+            if (turn === "x") {
+                tab[freeIndex].classList.add("hoverX");
+                tab[freeIndex].classList.remove("hoverO");
+            } else {
+                tab[freeIndex].classList.add("hoverO");
+                tab[freeIndex].classList.remove("hoverX");
+            }
+        }
+    }else if(mode === 'cpu-mode') {
+        if(player === 'x') {
+            for(let i = 0; i < freeTabs.length; i++) {
+                const freeIndex = freeTabs[i];
+                tab[freeIndex].classList.add("hoverX");
+            }
+            
+        }else if(player === 'o') {
+            for(let i = 0; i < freeTabs.length; i++) {
+                const freeIndex = freeTabs[i];
+                tab[freeIndex].classList.add("hoverO");
+            }
+        }
+    }
 
-    //                     filledByO.push(cpuMove);
-    //                     let indexToRemoveCpu = freeTabs.indexOf(cpuMove);
-    //                     if (indexToRemoveCpu > -1) {
-    //                         freeTabs.splice(indexToRemoveCpu, 1);
-    //                     }
-    //                     if (checkMovesO()) {
-    //                         winO();
-    //                         stopFilling();
-    //                         return;
-    //                     }
-    //                     turn = 'x';
-    //                 }
-    //             }
-    //             // cpuMove = freeTabs[(Math.floor(Math.random() * freeTabs.length))];
+}
 
-
-    //             console.log(filledByX);
-    //             console.log(filledByO);
-    //             console.log(freeTabs);
-    //             console.log(cpuMove);
-    //             e.target.onclick = null;
-    //         });
-    //     }
-    // } else if (player == 'o') {
-    //     let newMarkX = document.createElement('img');
-    //     let cpuMove = freeTabs[(Math.floor(Math.random() * freeTabs.length))];
-    //     newMarkX.classList.add('mark');
-    //     newMarkX.src = './assets/icon-x.svg';
-    //     tab[cpuMove].classList.add('filled');
-    //     tab[cpuMove].appendChild(newMarkX);
-    //     turn_icon.src = './assets/turn-o.svg';
-
-    //     filledByX.push(cpuMove);
-    //     let indexToRemoveCpu = freeTabs.indexOf(cpuMove);
-    //     if (indexToRemoveCpu > -1) {
-    //         freeTabs.splice(indexToRemoveCpu, 1);
-    //     }
-    //     turn = 'o';
-    //     for (let i = 0; i < tab.length; i++) {
-    //         let newMarkX = document.createElement('img');
-    //             let newMarkO = document.createElement('img');
-    //             let cpuMove;
-    //         tab[i].addEventListener('click', (e) => {
-    //             if (!tab[i].classList.contains('filled')) {
-    //                 cpuMove = freeTabs[(Math.floor(Math.random() * freeTabs.length))];
-    //                 newMarkO.classList.add('mark');
-    //                 newMarkO.src = './assets/icon-o.svg';
-    //                 tab[i].classList.add('filled');
-    //                 tab[i].appendChild(newMarkO);
-    //                 turn_icon.src = './assets/turn-x.svg';
-    //                 filledByO.push(i);
-    //                 let indexToRemoveCpu = freeTabs.indexOf(i);
-    //                 if (indexToRemoveCpu > -1) {
-    //                     freeTabs.splice(indexToRemoveCpu, 1);
-    //                 }
-    //                 if (checkMovesO()) {
-    //                     winO();
-    //                     stopFilling();
-    //                     return;
-    //                 }
-    //                 turn = 'x';
-    //                 if (!tab[cpuMove].classList.contains('filled')) {
-    //                     tab[cpuMove].appendChild(newMarkX);
-    //                     newMarkX.classList.add('mark');
-    //                     newMarkX.src = './assets/icon-x.svg';
-    //                     turn_icon.src = './assets/turn-o.svg';
-    //                     tab[cpuMove].classList.add('filled');
-    //                     filledByX.push(cpuMove);
-    //                     let indexToRemovePlayer = freeTabs.indexOf(cpuMove);
-    //                     if (indexToRemovePlayer > -1) {
-    //                         freeTabs.splice(indexToRemovePlayer, 1);
-    //                     }
-    //                     if (checkMovesX()) {
-    //                         winX();
-    //                         stopFilling();
-    //                         return;
-    //                     } else if (filledByX.length === 5) {
-    //                         tieGame();
-    //                     }
-    //                     turn = 'o';
-    //                 }
-    //             }
-    //             e.target.onclick = null;
-    //         })
-    //     }
-    // }
+function putMarksCpuMode() {
     if (player === 'x') {
         for (let i = 0; i < tab.length; i++) {
-          tab[i].addEventListener('click', (e) => {
-            if (!tab[i].classList.contains('filled') && turn === 'x') {
-              makePlayerMove(i);
-              if (checkMovesX()) {
-                winX();
-                stopFilling();
-                return;
-              } else if (filledByX.length === 5) {
-                tieGame();
-              }
-              turn = 'o';
-              setTimeout(makeCPUMove, 750);
-            }
-          });
+            tab[i].addEventListener('click', (e) => {
+                e.target.classList.remove('hoverX');
+                if (!tab[i].classList.contains('filled') && turn === 'x') {
+                    makePlayerMove(i);
+                    if (checkMovesX()) {
+                        winX();
+                        stopFilling();
+                        return;
+                    } else if (checkMovesO()) {
+                        winO();
+                        stopFilling();
+                        return;
+                    } else if (filledByX.length === 5) {
+                        tieGame();
+                        return;
+                    }
+                    turn = 'o';
+                    setTimeout(makeCPUMove, 750);
+                }
+                onHoverMarks();
+            });
         }
-      } else if (player === 'o') {
+    } else if (player === 'o') {
         makeCPUMove();
         for (let i = 0; i < tab.length; i++) {
-          tab[i].addEventListener('click', (e) => {
-            if (!tab[i].classList.contains('filled') && turn === 'x') {
-              makePlayerMove(i);
-              if (checkMovesX()) {
-                winX();
-                stopFilling();
-                return;
-              } else if (filledByX.length === 5) {
-                tieGame();
-              }
-              turn = 'o';
-              setTimeout(makeCPUMove, 750);
-            }
-          });
+            tab[i].addEventListener('click', (e) => {
+                e.target.classList.remove('hoverO');
+                if (!tab[i].classList.contains('filled') && turn === 'o') {
+                    makePlayerMove(i);
+                    if (checkMovesX()) {
+                        winX();
+                        stopFilling();
+                        return;
+                    } else if (checkMovesO()) {
+                        winO();
+                        stopFilling();
+                        return;
+                    }
+                    turn = 'x';
+                    setTimeout(makeCPUMove, 750);
+                    console.log(filledByX)
+                }
+                onHoverMarks();
+            });
         }
-      }
-      
-      function makePlayerMove(index) {
+    }
+
+}
+
+function makePlayerMove(index) {
+    if (player === 'x') {
         let newMarkX = document.createElement('img');
         tab[index].appendChild(newMarkX);
         newMarkX.classList.add('mark');
@@ -260,12 +187,27 @@ function putMarksCpu() {
         filledByX.push(index);
         let indexToRemovePlayer = freeTabs.indexOf(index);
         if (indexToRemovePlayer > -1) {
-          freeTabs.splice(indexToRemovePlayer, 1);
+            freeTabs.splice(indexToRemovePlayer, 1);
         }
-      }
-      
-      function makeCPUMove() {
-        let cpuMove = freeTabs[Math.floor(Math.random() * freeTabs.length)];
+    } else if (player === 'o') {
+        let newMarkO = document.createElement('img');
+        tab[index].appendChild(newMarkO);
+        newMarkO.classList.add('mark');
+        newMarkO.src = './assets/icon-o.svg';
+        turn_icon.src = './assets/turn-x.svg';
+        tab[index].classList.add('filled');
+        filledByO.push(index);
+        let indexToRemovePlayer = freeTabs.indexOf(index);
+        if (indexToRemovePlayer > -1) {
+            freeTabs.splice(indexToRemovePlayer, 1);
+        }
+    }
+}
+
+function makeCPUMove(e) {
+    let cpuMove = freeTabs[Math.floor(Math.random() * freeTabs.length)];
+    if (player === 'x') {
+        tab[cpuMove].classList.remove('hoverX');
         let newMarkO = document.createElement('img');
         tab[cpuMove].classList.add('filled');
         tab[cpuMove].appendChild(newMarkO);
@@ -275,22 +217,46 @@ function putMarksCpu() {
         filledByO.push(cpuMove);
         let indexToRemoveCpu = freeTabs.indexOf(cpuMove);
         if (indexToRemoveCpu > -1) {
-          freeTabs.splice(indexToRemoveCpu, 1);
+            freeTabs.splice(indexToRemoveCpu, 1);
         }
         if (checkMovesO()) {
-          winO();
-          stopFilling();
-          return;
+            winO();
+            stopFilling();
+            return;
         }
         turn = 'x';
-      }
+    } else if (player === 'o') {
+        tab[cpuMove].classList.remove('hoverO');
+        let newMarkX = document.createElement('img');
+        tab[cpuMove].classList.add('filled');
+        tab[cpuMove].appendChild(newMarkX);
+        newMarkX.classList.add('mark');
+        newMarkX.src = './assets/icon-x.svg';
+        turn_icon.src = './assets/turn-o.svg';
+        filledByX.push(cpuMove);
+        let indexToRemoveCpu = freeTabs.indexOf(cpuMove);
+        if (indexToRemoveCpu > -1) {
+            freeTabs.splice(indexToRemoveCpu, 1);
+        }
+        if (checkMovesX()) {
+            winX();
+            stopFilling();
+            return;
+        } else if (filledByX.length === 5) {
+            tieGame();
+            return;
+        }
+        turn = 'o';
+    }
 
 }
-/* This is function to make board tabs clickable, change turns, define winner... */
-function putMarksPvP() {
+/* This is function to make board tabs clickable, change turns, define winner... in Pvp Mode*/
+function putMarksPvPMode() {
     for (let i = 0; i < tab.length; i++) {
         tab[i].addEventListener('click', (e) => {
             let newMark = document.createElement('img');
+            e.target.classList.remove('hoverX');
+            e.target.classList.remove('hoverO');
             if (turn == 'x' && !tab[i].classList.contains('filled')) {
                 tab[i].appendChild(newMark);
                 newMark.classList.add('mark');
@@ -298,7 +264,10 @@ function putMarksPvP() {
                 turn_icon.src = './assets/turn-o.svg';
                 tab[i].classList.add('filled');
                 filledByX.push(i);
-                freeTabs.splice(i, 1);
+                let indexToRemoveCpu = freeTabs.indexOf(i);
+                if (indexToRemoveCpu > -1) {
+                    freeTabs.splice(indexToRemoveCpu, 1);
+                }
                 if (checkMovesX()) {
                     winX();
                     stopFilling();
@@ -313,7 +282,10 @@ function putMarksPvP() {
                 turn_icon.src = './assets/turn-x.svg';
                 tab[i].classList.add('filled');
                 filledByO.push(i);
-                freeTabs.splice(i, 1);
+                let indexToRemoveCpu = freeTabs.indexOf(i);
+                if (indexToRemoveCpu > -1) {
+                    freeTabs.splice(indexToRemoveCpu, 1);
+                }
                 if (checkMovesO()) {
                     winO();
                     stopFilling();
@@ -344,8 +316,17 @@ function winX() {
         game_over.style.display = 'flex';
     }, 750);
     winner_mark.src = './assets/icon-x.svg';
+    winner_mark.style.display = 'block';
     main_message.style.color = '#31C3BD';
-    game_result.innerHTML = 'PLAYER 1 WINS!';
+    if (mode === 'player-mode') {
+        game_result.innerHTML = 'PLAYER 1 WINS!';
+    } else if (mode === 'cpu-mode') {
+        if (player === 'x') {
+            game_result.innerHTML = 'YOU WON!';
+        } else if (player === 'o') {
+            game_result.innerHTML = 'OH NO, YOU LOST…';
+        }
+    }
     main_message.innerHTML = 'TAKES THE ROUND';
     quit_btn.innerHTML = 'QUIT';
     next_btn.innerHTML = 'NEXT ROUND';
@@ -372,9 +353,18 @@ function winO() {
         game_over.style.display = 'flex';
     }, 750);
     winner_mark.src = './assets/icon-o.svg';
+    winner_mark.style.display = 'block';
     main_message.style.color = '#F2B137';
     main_message.innerHTML = 'TAKES THE ROUND';
-    game_result.innerHTML = 'PLAYER 2 WINS!';
+    if (mode === 'player-mode') {
+        game_result.innerHTML = 'PLAYER 2 WINS!';
+    } else if (mode === 'cpu-mode') {
+        if (player === 'x') {
+            game_result.innerHTML = 'OH NO, YOU LOST…';
+        } else if (player === 'o') {
+            game_result.innerHTML = 'YOU WON!';
+        }
+    }
     quit_btn.innerHTML = 'QUIT';
     next_btn.innerHTML = 'NEXT ROUND';
     game_result.style.display = 'block';
@@ -439,6 +429,7 @@ function quitGame() {
             document.body.style.alignItems = 'center';
             cleanTabs();
             cleanArrays();
+            onHoverMarks();
             xScore.innerHTML = 0;
             oScore.innerHTML = 0;
             tie.innerHTML = 0;
@@ -451,6 +442,10 @@ function nextRound() {
         game_over.style.display = 'none';
         cleanTabs();
         cleanArrays();
+        onHoverMarks();
+        if (mode === 'cpu-mode' && player === 'o') {
+            makeCPUMove();
+        }
     })
 }
 
@@ -459,28 +454,43 @@ function restartGame() {
         game_over.style.display = 'flex';
     }, 350);
     game_result.style.display = 'none';
-    winner_mark.style.display = 'none';
     main_message.style.color = '#A8BFC9';
     main_message.innerHTML = 'RESTART GAME?';
     quit_btn.innerHTML = 'NO, CANCEL';
     next_btn.innerHTML = 'YES, RESTART';
+    winner_mark.style.display = 'none';
     quit_btn.addEventListener('click', () => {
         ingame.style.display = 'flex';
         menu.style.display = 'none';
         game_over.style.display = 'none';
-        document.body.style.alignItems = 'flex-start';
+        if (screenSize.matches) {
+            document.body.style.alignItems = 'center';
+        } else {
+            document.body.style.alignItems = 'flex-start';
+        }
     });
 
     next_btn.addEventListener('click', () => {
         ingame.style.display = 'flex';
         menu.style.display = 'none';
         game_over.style.display = 'none';
-        document.body.style.alignItems = 'flex-start';
-        xScore.innerHTML = 0;
-        oScore.innerHTML = 0;
-        tie.innerHTML = 0;
+        if (screenSize.matches) {
+            document.body.style.alignItems = 'center';
+        } else {
+            document.body.style.alignItems = 'flex-start';
+        }
+        if (next_btn.innerHTML === 'YES, RESTART') {
+            xScore.innerHTML = 0;
+            oScore.innerHTML = 0;
+            tie.innerHTML = 0;
+        }
+
         cleanTabs();
         cleanArrays();
+        onHoverMarks();
+        if (mode === 'cpu-mode' && player === 'o') {
+            makeCPUMove();
+        }
     });
 }
 

@@ -92,6 +92,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: .5s;
 }
 
 .active-player {
@@ -115,7 +116,7 @@ body {
     border-radius: 15px;
     padding: 1.4rem 0 2.2rem 0;
     border: none;
-
+    transition: .5s;
     font-weight: 700;
     font-size: 1.6rem;
     line-height: 2rem;
@@ -201,6 +202,7 @@ body {
     padding: 1rem 1.2rem;
     width: fit-content;
     margin-left: auto;
+    transition: .5s;
 }
 
 .board {
@@ -345,12 +347,14 @@ body {
     background: #A8BFC9;
     box-shadow: inset 0px -4px 0px #6B8997;
     border-radius: 10px;
+    transition: .5s;
 }
 
 #next {
     background: #F2B137;
     box-shadow: inset 0px -4px 0px #CC8B13;
     border-radius: 10px;
+    transition: .5s;
 }
 
 /* */
@@ -368,3 +372,97 @@ body {
     box-shadow: inset 0px -8px 0px #CC8B13;
 }
 /* */
+
+
+/* ---- Tablet ---- */
+
+@media screen and (min-width: 768px){
+    html {
+        font-size: 15px;
+    }
+
+    #menu {
+        width: 65vw;
+    }
+
+    #ingame {
+        width: 70vw;
+    }
+
+    .header {
+        margin-bottom: 3rem;
+    }
+
+    .tab {
+        height: 18vw;
+    }
+}
+
+@media screen and (min-width: 1024px){
+    html {
+        font-size: 10px;
+    }
+
+    body {
+        align-items: center;
+    }
+
+    #menu {
+        width: 40vw;
+    }
+
+    #ingame {
+        width: 35vw;
+    }
+
+    .tab {
+        height: 10vw;
+    }
+
+    /* --- Hovers --- */
+
+    .disactive-player:hover {
+        background: rgba(168, 191, 201, 0.05);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    #vs-cpu:hover {
+        background: #FFC860;
+        cursor: pointer;
+    }
+
+    #vs-player:hover {
+        background: #65E9E4;
+        cursor: pointer;
+    }
+
+    .hoverX:hover {
+        background-image: url('./assets/icon-x-outline.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+    }
+
+    .hoverO:hover {
+        background-image: url('./assets/icon-o-outline.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+    }
+
+    #restart:hover {
+        background: #DBE8ED;
+        cursor: pointer;
+    }
+
+    #quit:hover {
+        background: #DBE8ED;
+        cursor: pointer;
+    }
+
+    #next:hover {
+        background: #FFC860;
+        cursor: pointer;
+    }
+}
