@@ -293,6 +293,7 @@ function putMarksPvPMode() {
                 }
                 turn = 'x';
             }
+            onHoverMarks();
             e.target.onclick = null;
         });
     }
