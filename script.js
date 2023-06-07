@@ -73,7 +73,6 @@ function startGame(chooseMode) {
     } else {
         document.body.style.alignItems = 'flex-start';
     }
-    onHoverMarks();
     mode = chooseMode;
     if (mode === 'cpu-mode') {
         if (player === "x") {
@@ -85,43 +84,45 @@ function startGame(chooseMode) {
 
         }
         putMarksCpuMode();
+        onHoverMarksCpu();
     }
 
     if (mode === 'player-mode') {
         firstPerson.innerHTML = "X (P1)";
         secondPerson.innerHTML = "O (P2)";
         putMarksPvPMode();
+        onHoverMarksPvp();
     }
     restart.addEventListener('click', restartGame);
 }
 
-function onHoverMarks() {
-    if (mode === 'player-mode') {
-        for (let index = 0; index < freeTabs.length; index++) {
-            const freeIndex = freeTabs[index];
-            if (turn === "x") {
-                tab[freeIndex].classList.add("hoverX");
-                tab[freeIndex].classList.remove("hoverO");
-            } else {
-                tab[freeIndex].classList.add("hoverO");
-                tab[freeIndex].classList.remove("hoverX");
-            }
-        }
-    }else if(mode === 'cpu-mode') {
-        if(player === 'x') {
-            for(let i = 0; i < freeTabs.length; i++) {
-                const freeIndex = freeTabs[i];
-                tab[freeIndex].classList.add("hoverX");
-            }
-            
-        }else if(player === 'o') {
-            for(let i = 0; i < freeTabs.length; i++) {
-                const freeIndex = freeTabs[i];
-                tab[freeIndex].classList.add("hoverO");
-            }
+function onHoverMarksPvp() {
+    for (let index = 0; index < freeTabs.length; index++) {
+        const freeIndex = freeTabs[index];
+        if (turn === "x") {
+            tab[freeIndex].classList.add("hoverX");
+            tab[freeIndex].classList.remove("hoverO");
+        } else {
+            tab[freeIndex].classList.add("hoverO");
+            tab[freeIndex].classList.remove("hoverX");
         }
     }
 
+}
+
+function onHoverMarksCpu() {
+    if (player === 'x') {
+        for (let i = 0; i < freeTabs.length; i++) {
+            const freeIndex = freeTabs[i];
+            tab[freeIndex].classList.add("hoverX");
+        }
+
+    } else if (player === 'o') {
+        for (let i = 0; i < freeTabs.length; i++) {
+            const freeIndex = freeTabs[i];
+            tab[freeIndex].classList.add("hoverO");
+        }
+    }
 }
 
 function putMarksCpuMode() {
@@ -146,7 +147,7 @@ function putMarksCpuMode() {
                     turn = 'o';
                     setTimeout(makeCPUMove, 750);
                 }
-                onHoverMarks();
+                onHoverMarksCpu();
             });
         }
     } else if (player === 'o') {
@@ -169,7 +170,7 @@ function putMarksCpuMode() {
                     setTimeout(makeCPUMove, 750);
                     console.log(filledByX)
                 }
-                onHoverMarks();
+                onHoverMarksCpu();
             });
         }
     }
@@ -293,7 +294,7 @@ function putMarksPvPMode() {
                 }
                 turn = 'x';
             }
-            onHoverMarks();
+            onHoverMarksPvp();
             e.target.onclick = null;
         });
     }
